@@ -66,7 +66,7 @@ function Sidebar(){
     return(
         <section className="sidebar">
             {/* New Chat button */}
-            <button onClick={createNewChat}>
+            <button onClick={createNewChat} className="newChatBtn">
                 <img src="src/assets/blacklogo.png" alt="gpt logo" className="logo"></img>
                 <span><i className="fa-solid fa-pen-to-square"></i></span>
             </button>

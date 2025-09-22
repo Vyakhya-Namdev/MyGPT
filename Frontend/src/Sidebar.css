@@ -1,161 +1,98 @@
 .sidebar {
-    background-color: #171717;
-    color: #b4b4b4;
-    height: 100vh;
-    width: 320px; /* fixed width sidebar */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-    box-sizing: border-box;
-    padding: 0 10px;
+  background-color: var(--sidebar-bg-color);
+  color: var(--text-color);
+  height: 100vh;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 5px; /* added px */
-    background-color: transparent;
-    border: solid 2px rgba(255, 255, 255, 0.5);
-    cursor: pointer;
+.newChatBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: var(--button-bg-color);
+  border: solid 0.5px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .logo {
-    height: 25px;
-    width: 25px;
-    background-color: white;
-    border-radius: 50%;
-    object-fit: cover;
+  height: 25px;
+  width: 25px;
+  background-color: #fff;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-button span {
-    font-size: 20px;
+.newChatBtn span {
+  font-size: 20px;
 }
 
-button:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    border: solid 2px rgba(255, 255, 255, 0.5);
+.newChatBtn i{    
+    color: var(--text-color);
+}
+
+.newChatBtn:hover {
+  background-color: var(--button-hover-bg-color);
 }
 
 .history {
-    margin: 10px;
-    padding: 10px;
-    height: 100%;
+  margin: 10px;
+  padding: 10px;
+  height: 100%;
 }
 
 .history li {
-    list-style-type: none;
-    cursor: pointer;
-    padding: 2px 5px;
-    font-size: 14px;
-    border: solid 10px transparent;
-    position: relative;
+  list-style-type: none;
+  cursor: pointer;
+  padding: 2px 5px;
+  font-size: 14px;
+  border: solid 10px transparent;
+  position: relative;
+  color: var(--text-color);
 }
 
 .history li:hover {
-    background-color: rgba(180,180,180,0.05);
-    border-radius: 10px;
+  background-color: rgba(180, 180, 180, 0.05);
+  border-radius: 10px;
 }
 
 .sign {
-    margin: 10px;
-    font-size: 14px;
-    text-align: center;
-    border-top: solid 0.25px rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  margin: 10px;
+  font-size: 14px;
+  text-align: center;
+  border-top: solid 0.25px var(--border-color);
 }
 
-.fa-trash{
-    opacity: 0;
-    position: absolute;
-    right: 0;
+.sign p{
+    color: var(--text-muted-color);
 }
 
-.history li:hover .fa-trash{
-    opacity: 1;
-    color: #fff;
+.fa-trash {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  color: var(--text-muted-color);
+  transition: color 0.3s;
 }
 
-.fa-trash:hover{
-    color: #f87171 !important;
+.history li:hover .fa-trash {
+  opacity: 1;
+  color: var(--text-color);
 }
 
-.highlighted{
-    background-color: rgba(180, 180, 180, 0.05);
-    border-radius: 10px;
+.fa-trash:hover {
+  color: #f87171 !important;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 240px;
-        padding: 0 8px;
-    }
-    button {
-        margin: 8px;
-        padding: 8px;
-    }
-    button span {
-        font-size: 18px;
-    }
-    .logo {
-        height: 22px;
-        width: 22px;
-    }
-    .history {
-        margin: 8px;
-        padding: 8px;
-    }
-    .history li {
-        font-size: 13px;
-        padding: 2px 4px;
-    }
-    .sign {
-        margin: 8px;
-        font-size: 13px;
-    }
-}
-
-@media (max-width: 480px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        padding: 10px;
-        flex-direction: row;
-        justify-content: flex-start;
-        overflow-x: auto;
-    }
-    button {
-        flex-shrink: 0;
-        margin: 5px 10px 5px 0;
-        padding: 6px 10px;
-    }
-    button span {
-        font-size: 16px;
-    }
-    .logo {
-        height: 20px;
-        width: 20px;
-    }
-    .history {
-        margin: 0 10px;
-        padding: 0;
-        height: auto;
-        flex-direction: row;
-        display: flex;
-        gap: 12px;
-        overflow-x: auto;
-    }
-    .history li {
-        font-size: 12px;
-        padding: 4px 6px;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-    .sign {
-        display: none;
-    }
+.highlighted {
+  background-color: rgba(180, 180, 180, 0.05);
+  border-radius: 10px;
 }

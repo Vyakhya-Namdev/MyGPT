@@ -1,29 +1,44 @@
-.chats{
-    max-width: 700px;
-    overflow-y: scroll;
-    padding: 8rem;
+.chats {
+  max-width: 700px;
+  overflow-y: scroll;
+  padding: 8rem;
+  color: var(--text-color);
 }
 
-.userDiv{
-    display: flex;
-    justify-content: flex-end;
-    font-size: 0.9rem;
+h2{
+    color: var(--text-color);
 }
 
-.aiDiv{
-    text-align: left;
-    font-size: 0.9rem;
+.userDiv {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.9rem;
+  color: var(--text-color);
 }
 
-.userMessage{
-    background-color: #323232;
-    padding: 10px 20px;
-    border-radius: 14px;
-    margin-left: 15rem;
-    max-width: 500px;
-    width: fit-content;
+.aiDiv {
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--text-color);
 }
 
-.aiMessage{
+.userMessage {
+  background-color: var(--user-message-bg);
+  padding: 10px 20px;
+  border-radius: 14px;
+  margin-left: 15rem;
+  max-width: 500px;
+  width: fit-content;
+  color: var(--text-color);
+}
 
+.hljs {   /* used to give highlights effect to rehypeHighlight */
+  border-radius: 14px !important;
+  background-color: var(--code-bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+pre {
+  white-space: pre-wrap;
+  color: var(--text-color);
 }

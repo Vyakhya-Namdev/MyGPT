@@ -2,18 +2,19 @@ import "./ChatWindow.css";
 import Chat from "./Chat.jsx";
 import { useContext, useState, useEffect } from "react";
 import { MyContext } from "./MyContext.jsx";
-import {RingLoader} from "react-spinners";
+import { RingLoader } from "react-spinners";
 
 
-function ChatWindow(){
-    const {prompt, setPrompt, reply, setReply, currThreadId, setNewChat, setPrevChats} = useContext(MyContext);
+function ChatWindow() {
+    const { prompt, setPrompt, reply, setReply, currThreadId, setNewChat, setPrevChats } = useContext(MyContext);
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);   //set default false value
+    const [darkMode, setDarkMode] = useState(false);
 
-    const getReply = async() => {
+    const getReply = async () => {
         setLoading(true);
         setNewChat(false);
-        
+
         console.log("message: ", prompt, "threadId: ", currThreadId);
         const options = {
             method: "POST",
@@ -26,12 +27,12 @@ function ChatWindow(){
             })
         };
 
-        try{
+        try {
             const response = await fetch("http://localhost:8080/api/chat", options);
             const res = await response.json();
             setReply(res.reply);
             console.log(res);
-        }catch(err){
+        } catch (err) {
             console.log(err);
 
         }
@@ -40,9 +41,9 @@ function ChatWindow(){
 
     //Append new chats to prev chats
     useEffect(() => {
-        if(prompt && reply){
+        if (prompt && reply) {
             setPrevChats(prevChats => (
-                [...prevChats,{
+                [...prevChats, {
                     role: "user",
                     content: prompt,
                 },
@@ -59,11 +60,26 @@ function ChatWindow(){
         setIsOpen(!isOpen);
     }
 
-    return(
-        <div className="chatWindow">
+    const toggleDarkMode = () => {
+        setDarkMode(preMode => !preMode);
+    }
+    useEffect(() => {
+        if (darkMode) {
+            document.body.classList.add("dark-mode");
+        } else {
+            document.body.classList.remove("dark-mode");
+        }
+    }, [darkMode]);
+
+
+    return (
+        <div className={`chatWindow ${darkMode ? "dark" : "light"}`}>
             <div className="navbar">
-                <span>MyMate <i className="fa-solid fa-chevron-down"></i></span>
+                <span>MyMate <i className="fa-solid fa-chevron-down" style={{ color: 'var(--text-muted-color)' }}></i></span>
                 <div className="userIconDiv">
+                    <button className="darkModeBtn" onClick={toggleDarkMode}>
+                        {darkMode ? <i className="fa-solid fa-moon"></i> : <i className="fa-solid fa-sun" ></i>}
+                    </button>
                     <span className="userIcon" onClick={handleProfileClick}><i className="fa-solid fa-user"></i></span>
                 </div>
             </div>
@@ -80,8 +96,8 @@ function ChatWindow(){
             <div className="chatInput">
                 <div className="inputBox">
                     <input placeholder="Ask anything"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}>
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}>
                     </input>
                     <div id="submit" onClick={getReply}><i className="fa-solid fa-paper-plane"></i></div>
                 </div>
