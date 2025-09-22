@@ -34,7 +34,7 @@ router.get("/thread", async(req, res) => {
 })
 
 //Get thread through threadId
-router.get("thread/:threadId", async(req, res) => {
+router.get("/thread/:threadId", async(req, res) => {
     const {threadId} = req.params;
 
     try{
@@ -72,14 +72,16 @@ router.delete("/thread/:threadId", async(req, res) => {
 
 //to post the message in thread
 router.post("/chat", async(req, res) => {
+    console.log("incoming body:", req.body);
     const {threadId, message} = req.body;
 
     if(!threadId || !message){
+        console.log("Missing fields");
         return res.status(400).json({error: "Please provide all the missing fields"});
     }
 
     try{
-        const thread = await Thread.findOneAndUpdate({threadId});
+        let thread = await Thread.findOne({threadId});
         if(!thread){
             //create a new thread in DB
             thread = new Thread({
