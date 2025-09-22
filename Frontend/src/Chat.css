@@ -19,7 +19,7 @@ h2{
 .aiDiv {
   text-align: left;
   font-size: 0.9rem;
-  color: var(--text-color);
+  color: var(--text-color) !important;
 }
 
 .userMessage {

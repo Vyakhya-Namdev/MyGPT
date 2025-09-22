@@ -1,5 +1,5 @@
 * {
-    color: #ececec;
+    color: var(--text-color);
     font-family: Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 

@@ -54,6 +54,10 @@ hr, .divider, .sidebar, .chatWindow {
   border-color: var(--border-color);
 }
 
-.muted, .info, .sidebar {
+.muted, .info {
   color: var(--text-muted-color);
+}
+
+.sidebar {
+  color: inherit; /* or set a specific variable if needed */
 }

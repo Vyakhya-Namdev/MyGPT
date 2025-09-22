@@ -9,7 +9,7 @@ function ChatWindow() {
     const { prompt, setPrompt, reply, setReply, currThreadId, setNewChat, setPrevChats } = useContext(MyContext);
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);   //set default false value
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(true);
 
     const getReply = async () => {
         setLoading(true);
@@ -86,13 +86,18 @@ function ChatWindow() {
             {
                 isOpen &&
                 <div className="dropDown">
-                    <div className="dropDownItem"><i class="fa-solid fa-gear"></i>Settings</div>
-                    <div className="dropDownItem"><i class="fa-solid fa-cloud-arrow-up"></i>Upgrade Plan</div>
-                    <div className="dropDownItem"><i class="fa-solid fa-right-from-bracket"></i>LogOut</div>
+                    <div className="dropDownItem"><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;Settings</div>
+                    <div className="dropDownItem"><i class="fa-solid fa-cloud-arrow-up"></i>&nbsp;&nbsp;Upgrade Plan</div>
+                    <div className="dropDownItem"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;LogOut</div>
                 </div>
             }
             <Chat></Chat>
-            <RingLoader color="#fff" loading={loading} className="loader"></RingLoader>
+            <RingLoader
+                color={darkMode ? "#fff" : "#000"}
+                loading={loading}
+                size={32}
+                className="loader"
+            />
             <div className="chatInput">
                 <div className="inputBox">
                     <input placeholder="Ask anything"

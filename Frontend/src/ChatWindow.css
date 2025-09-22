@@ -75,6 +75,10 @@
   align-items: center;
 }
 
+.loader{
+  margin-bottom: 100px;
+}
+
 input {
   width: 100%;
   border: none;
@@ -143,4 +147,8 @@ input:focus {
 .dropDownItem:hover {
   background-color: rgba(180, 180, 180, 0.1);
   border-radius: 6px;
+}
+
+.dropDownItem i{
+  color: var(--text-muted-color);
 }
