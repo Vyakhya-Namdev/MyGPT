@@ -13,6 +13,7 @@
   --code-bg-color: #f2f2f4;             /* Code blocks: very light gray */
   --border-color: #dedee4;              /* Section/divider border */
   --text-muted-color: #73748a;          /* Subtle muted gray text */
+  --border-btn: #212121;
 }
 
 body.dark-mode {
@@ -29,6 +30,7 @@ body.dark-mode {
   --code-bg-color: #2b2b2b;
   --border-color: #36363a;
   --text-muted-color: #b4b4b4;
+  --border-btn: #ececec;
 }
 
 body {

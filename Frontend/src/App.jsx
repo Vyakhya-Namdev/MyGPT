@@ -1,35 +1,17 @@
-import './App.css'
-import ChatWindow from './ChatWindow';
-import Sidebar from './Sidebar';
-import { MyContext } from "./MyContext.jsx";
-import { useState } from "react";
-import { v1 as uuidv1 } from "uuid";
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./MyContext.jsx";
+import { ThemeProvider } from "./ThemeContext";
+import AppRoutes from "./AppRoutes"; // Assuming you moved your routes to a separate component file
 
-function App() {
-  const[prompt, setPrompt] = useState("");
-  const[reply, setReply] = useState(null);
-  const[currThreadId, setCurrThreadId] = useState(uuidv1());
-  const[prevChats, setPrevChats] = useState([]);  //stores all chats of thread
-  const[newChat, setNewChat] = useState(true);   //always new chat starts when we open app
-  const[allThreads, setAllThreads] = useState([]);
-
-  const providerValues = {
-    prompt, setPrompt,
-    reply, setReply,
-    currThreadId, setCurrThreadId,
-    prevChats, setPrevChats,
-    newChat, setNewChat,
-    allThreads, setAllThreads,
-  };   // passing values
-
+export default function App() {
   return (
-    <div className='app'>
-      <MyContext.Provider value={providerValues}>
-        <Sidebar />
-        <ChatWindow />
-      </MyContext.Provider>
-    </div>
-  )
+    <BrowserRouter>
+      <AuthProvider>
+        <ThemeProvider>
+          <AppRoutes />
+        </ThemeProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
-
-export default App
