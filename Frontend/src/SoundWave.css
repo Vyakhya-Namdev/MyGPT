@@ -1,0 +1,28 @@
+.soundwave {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  margin-right: 10px;
+}
+.soundwave span {
+  display: block;
+  width: 3px;
+  height: 12px;
+  margin: 0 2px;
+  border-radius: 4px;
+  background: #31c173;
+  opacity: 0.7;
+  animation: none;
+}
+.soundwave.active span {
+  animation: wave 1s infinite ease-in-out;
+}
+.soundwave.active span:nth-child(2n)  { animation-delay: 0.1s; }
+.soundwave.active span:nth-child(3n)  { animation-delay: 0.2s; }
+.soundwave.active span:nth-child(4n)  { animation-delay: 0.3s; }
+.soundwave.active span:nth-child(5n)  { animation-delay: 0.4s; }
+
+@keyframes wave {
+  0%, 100% { height: 12px; }
+  50%      { height: 35px; }
+}

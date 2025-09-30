@@ -43,12 +43,6 @@ function Chat({ isRecording }) {
             )}
           </div>
         ))}
-
-        {isRecording && (
-          <div className="aiDiv listeningIndicator">
-            <p>🎤 Listening...</p>
-          </div>
-        )}
       </div>
     </>
   );

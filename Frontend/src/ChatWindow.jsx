@@ -1,5 +1,6 @@
 import "./ChatWindow.css";
 import Chat from "./Chat.jsx";
+import SoundWave from "./SoundWave.jsx"; // your existing soundwave component (canvas wave)
 import { useContext, useState, useEffect, useRef } from "react";
 import { MyContext, AuthContext } from "./MyContext.jsx";
 import { RingLoader } from "react-spinners";
@@ -27,6 +28,7 @@ function ChatWindow({ darkMode, setDarkMode }) {
   const mediaRecorder = useRef(null);
   const audioChunks = useRef([]);
 
+  // Start recording and show popup
   const startRecording = async () => {
     setIsRecording(true);
     audioChunks.current = [];
@@ -70,7 +72,7 @@ function ChatWindow({ darkMode, setDarkMode }) {
           console.error("Upload error:", error);
           alert("Failed to upload audio. Check console for more info.");
         }
-        setIsRecording(false); // Ensure recording state is stopped after upload
+        setIsRecording(false);
       };
 
       mediaRecorder.current.start();
@@ -80,13 +82,16 @@ function ChatWindow({ darkMode, setDarkMode }) {
     }
   };
 
+  // Stop recording
   const stopRecording = () => {
     if (mediaRecorder.current && mediaRecorder.current.state !== "inactive") {
       mediaRecorder.current.stop();
     }
-    setIsRecording(false); // Ensure UI updates immediately on stopCLICK
+    // actual UI update after upload happens on onstop
+    // but can also immediately set false here if you want instant feedback
   };
 
+  // Mic button click toggler
   const handleMicClick = () => {
     if (isRecording) {
       stopRecording();
@@ -196,9 +201,40 @@ function ChatWindow({ darkMode, setDarkMode }) {
 
       <Chat isRecording={isRecording} />
       <RingLoader color={darkMode ? "#fff" : "#000"} loading={loading} size={32} className="loader" />
+
+      {/* Listening popup shown when recording */}
+      {isRecording && (
+        <div className={`listeningModal ${darkMode ? "dark" : "light"}`}>
+          <div className="backdrop"></div>
+          <div className="modalContent">
+            <h2>
+              <i className="fa-solid fa-microphone"></i>&nbsp;&nbsp;Listening...
+            </h2>
+            <SoundWave isRecording={isRecording} />
+            <button
+              className="circleStopBtn"
+              onClick={() => {
+                if (mediaRecorder.current && mediaRecorder.current.state !== "inactive") {
+                  mediaRecorder.current.stop();
+                }
+                setIsRecording(false);
+              }}
+              title="Stop Recording"
+            >
+              <i className="fa-solid fa-stop"></i>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="chatInput">
-        <div className="inputBox">
-          <input placeholder="Ask anything" value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+        <div className="inputBox" style={{ width: "100%", position: "relative" }}>
+          <input
+            placeholder="Ask anything"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            style={{ width: "100%" }}
+          />
           <button
             className={`micBtn ${isRecording ? "listening" : ""}`}
             onClick={handleMicClick}
@@ -212,6 +248,7 @@ function ChatWindow({ darkMode, setDarkMode }) {
           </div>
         </div>
       </div>
+
       <div>
         <p className="info">MyMate can make mistakes. Check important info. See Cookie Preferences.</p>
       </div>
