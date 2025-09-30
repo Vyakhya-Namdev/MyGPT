@@ -10,8 +10,8 @@ import axios from "axios";
 import speechRoute from "./routes/speech.js";
 
 const app = express();
-const PORT = 8080;
-const WSPORT = 4040;    //WebSocket server port for audio streaming
+const PORT = process.env.PORT ;
+const WSPORT = process.env.WSPORT ;    //WebSocket server port for audio streaming
 
 app.use(express.json());
 app.use(cors({
