@@ -10,8 +10,6 @@
   color: var(--text-color);
 }
 
-/* navbar */
-
 .navbar {
   width: 100%;
   display: flex;
@@ -32,12 +30,12 @@
   color: var(--text-color);
 }
 
-.fa-sun{
-    color: var(--text-muted-color);
+.fa-sun {
+  color: var(--text-muted-color);
 }
 
-.fa-paper-plane{
-    color: var(--text-color);
+.fa-paper-plane {
+  color: var(--text-color);
 }
 
 .userIconDiv {
@@ -68,19 +66,15 @@
 
 .inputBox {
   width: 100%;
-  position: relative;
   max-width: 700px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 10px;
+  background: transparent;
 }
 
-.loader{
-  margin-bottom: 100px;
-}
-
-input {
-  width: 100%;
+.inputBox input {
+  flex: 1;
   border: none;
   background-color: rgba(255, 255, 255, 0.05);
   padding: 20px;
@@ -92,26 +86,72 @@ input {
     rgba(0, 0, 0, 0.05) 0 12px 3px,
     rgba(0, 0, 0, 0.05) 0 -3px 5px;
   color: var(--text-color);
+  min-width: 0;
 }
 
-input:focus {
+.inputBox input:focus {
   outline: none;
 }
 
-#submit {
-  cursor: pointer;
-  height: 35px;
-  width: 35px;
-  font-size: 20px;
-  position: absolute;
-  right: 15px;
+/* Microphone Button Styling */
+.micBtn {
+  width: 40px;
+  height: 40px;
+  background: #3a3a3a;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: 4px;
+  margin-right: 4px;
+  transition: background 0.2s;
+  user-select: none;
+}
+
+/* Animation for listening state */
+@keyframes micPop {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.micBtn.listening {
+  background: #5ddc9e;
+  color: #222;
+  animation: micPop 1s infinite;
+}
+
+.micBtn:focus {
+  outline: 2px solid #5ddc9e;
+}
+
+/* Send Button Styling */
+#submit {
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  font-size: 25px;
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0;
+  transition: background 0.2s;
 }
 
 #submit i:hover {
   color: var(--text-muted-color);
+}
+
+.loader {
+  margin-bottom: 100px;
 }
 
 .info {
@@ -120,8 +160,7 @@ input:focus {
   color: var(--text-muted-color);
 }
 
-/* dropdown css */
-
+/* Dropdown css */
 .dropDown {
   position: absolute;
   top: 4rem;
@@ -149,7 +188,7 @@ input:focus {
   border-radius: 6px;
 }
 
-.dropDownItem i{
+.dropDownItem i {
   color: var(--text-muted-color);
 }
 

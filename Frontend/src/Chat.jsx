@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
 
-function Chat() {
+function Chat({ isRecording }) {
   const { newChat, prevChats, reply } = useContext(MyContext);
   const [latestReply, setLatestReply] = useState(null);
   const { user } = useContext(AuthContext);
@@ -44,6 +44,11 @@ function Chat() {
           </div>
         ))}
 
+        {isRecording && (
+          <div className="aiDiv listeningIndicator">
+            <p>🎤 Listening...</p>
+          </div>
+        )}
       </div>
     </>
   );

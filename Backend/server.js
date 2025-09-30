@@ -5,9 +5,13 @@ import mongoose from "mongoose";
 import chatRoute from "./routes/chat.js";
 import cookieParser from "cookie-parser";
 import authRoute from "./routes/auth.js";
+import WebSocket, { WebSocketServer } from "ws";
+import axios from "axios";
+import speechRoute from "./routes/speech.js";
 
 const app = express();
 const PORT = 8080;
+const WSPORT = 4040;    //WebSocket server port for audio streaming
 
 app.use(express.json());
 app.use(cors({
@@ -18,10 +22,12 @@ app.use(cookieParser());
 
 app.use("/api", chatRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/speech", speechRoute);
 
 app.listen(PORT, () => {
     console.log("Server is running on port " + PORT);
     connectDB();
+    startWebSocketServer();
 })
 
 const connectDB = async() => {
@@ -31,6 +37,45 @@ const connectDB = async() => {
     }catch(err){
         console.log("Failed to connect to MongoDB", err);
     }
+}
+
+//WebSocket server for streaming audio to AssemblyAI
+const startWebSocketServer = () => {
+    const wss = new WebSocketServer({ port: WSPORT });
+    console.log(`WebSocket Server listening on ws://localhost:${WSPORT}`);
+
+    wss.on("connection", (ws) => {
+        console.log("WebSocket server connected");
+        ws.on("message", async (message) => {
+            try{
+                //Here you forward received audio chunk to AssemblyAI streaming endpoint
+                const apiResponse = await axios({
+                    method: "POST",
+                    url: "https://api.assemblyai.com/v2/stream",
+                    data: message,
+                    headers: {
+                        authorization: process.env.ASSEMBLY_AI_API_KEY,
+                        "Content-type": "audio/web"
+                    },
+                        data: message,
+                });
+
+                // Adapt this to actual transcript from apiResponse
+                const transcript = apiResponse.data.text || "Transcript not available";
+
+                // Send back to client
+                ws.send(JSON.stringify({ transcript }));
+            } catch(error){
+                console.log("Error in WebSocket server", error);
+                ws.send(JSON.stringify({ error: "Transcription error" }));
+            }
+        });
+
+        ws.on("close", () => {
+            console.log("WebSocket server disconnected");
+        });
+    })           
+            
 }
 
 // app.post("/test", async (req, res) => {

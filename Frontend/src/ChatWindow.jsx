@@ -1,6 +1,6 @@
 import "./ChatWindow.css";
 import Chat from "./Chat.jsx";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { MyContext, AuthContext } from "./MyContext.jsx";
 import { RingLoader } from "react-spinners";
 import api from "./api/api.js";
@@ -22,7 +22,78 @@ function ChatWindow({ darkMode, setDarkMode }) {
 
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [lastPrompt, setLastPrompt] = useState(""); // Capture prompt when sending
+  const [lastPrompt, setLastPrompt] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorder = useRef(null);
+  const audioChunks = useRef([]);
+
+  const startRecording = async () => {
+    setIsRecording(true);
+    audioChunks.current = [];
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder.current = new MediaRecorder(stream, { mimeType: "audio/webm" });
+
+      mediaRecorder.current.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          audioChunks.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.current.onstop = async () => {
+        const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
+        console.log("Audio Blob size in bytes:", audioBlob.size);
+        if (audioBlob.size === 0) {
+          alert("No audio recorded. Please try again.");
+          setIsRecording(false);
+          return;
+        }
+
+        try {
+          const formData = new FormData();
+          formData.append("audio", audioBlob, "recording.webm");
+
+          const response = await fetch("http://localhost:8080/api/speech/transcribe", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+          if (data.transcript) {
+            setPrompt(data.transcript);
+          } else {
+            console.error("Transcription error:", data.error);
+            alert("Error in transcription. Please try again.");
+          }
+        } catch (error) {
+          console.error("Upload error:", error);
+          alert("Failed to upload audio. Check console for more info.");
+        }
+        setIsRecording(false); // Ensure recording state is stopped after upload
+      };
+
+      mediaRecorder.current.start();
+    } catch (err) {
+      alert("Microphone permission denied or unavailable.");
+      setIsRecording(false);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder.current && mediaRecorder.current.state !== "inactive") {
+      mediaRecorder.current.stop();
+    }
+    setIsRecording(false); // Ensure UI updates immediately on stopCLICK
+  };
+
+  const handleMicClick = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -49,12 +120,11 @@ function ChatWindow({ darkMode, setDarkMode }) {
       setReply(res.data.reply);
       setPrompt("");
     } catch (err) {
-      console.log("Chat API error:", err.response?.status, err.message);
+      console.error("Chat API error:", err.response?.status, err.message);
     }
     setLoading(false);
   };
 
-  // Update prevChats when reply arrives using captured lastPrompt
   useEffect(() => {
     if (lastPrompt && reply) {
       setPrevChats((prevChats) => [
@@ -90,10 +160,10 @@ function ChatWindow({ darkMode, setDarkMode }) {
           {!user ? (
             <>
               <button className="loginBtn" onClick={() => (window.location.href = "/login")}>
-                Login <i class="fa-solid fa-right-to-bracket"></i>
+                Login <i className="fa-solid fa-right-to-bracket"></i>
               </button>
               <button className="registerBtn" onClick={() => (window.location.href = "/register")}>
-                Signup<i class="fa-solid fa-user-plus"></i>
+                Signup <i className="fa-solid fa-user-plus"></i>
               </button>
             </>
           ) : (
@@ -106,7 +176,7 @@ function ChatWindow({ darkMode, setDarkMode }) {
       {isOpen && (
         <div className="dropDown">
           {user && (
-            <div className="dropDownItem emailItem" style={{opacity: "0.5"}}>
+            <div className="dropDownItem emailItem" style={{ opacity: "0.5" }}>
               {user.email}
             </div>
           )}
@@ -124,11 +194,19 @@ function ChatWindow({ darkMode, setDarkMode }) {
         </div>
       )}
 
-      <Chat />
+      <Chat isRecording={isRecording} />
       <RingLoader color={darkMode ? "#fff" : "#000"} loading={loading} size={32} className="loader" />
       <div className="chatInput">
         <div className="inputBox">
           <input placeholder="Ask anything" value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+          <button
+            className={`micBtn ${isRecording ? "listening" : ""}`}
+            onClick={handleMicClick}
+            title={isRecording ? "Stop Recording" : "Start Recording"}
+            tabIndex={0}
+          >
+            <i className="fa-solid fa-microphone"></i>
+          </button>
           <div id="submit" onClick={getReply}>
             <i className="fa-solid fa-paper-plane"></i>
           </div>
