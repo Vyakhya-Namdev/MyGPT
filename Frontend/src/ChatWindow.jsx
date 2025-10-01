@@ -56,7 +56,7 @@ function ChatWindow({ darkMode, setDarkMode }) {
           const formData = new FormData();
           formData.append("audio", audioBlob, "recording.webm");
 
-          const response = await fetch("http://localhost:8080/api/speech/transcribe", {
+          const response = await fetch("https://mymate-8h3j.onrender.com/api/speech/transcribe", {
             method: "POST",
             body: formData,
           });

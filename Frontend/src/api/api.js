@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://mymate-8h3j.onrender.com/api",
   withCredentials: true, // important to send cookies
 });
 
