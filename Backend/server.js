@@ -15,7 +15,8 @@ const WSPORT = process.env.WSPORT ;    //WebSocket server port for audio streami
 
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:5173",            
+//   origin: "https://mymategpt.onrender.com", 
+  origin: "http://localhost:5173",           
   credentials: true                           
 }));
 app.use(cookieParser()); 
